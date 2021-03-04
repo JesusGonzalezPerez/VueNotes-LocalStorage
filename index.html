@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto Vue.js</title>
+
+
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Css -->
+    <link rel="stylesheet" href="css.css">
+
+    <!-- Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+</head>
+
+<body>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-sm navbar-light" id="navbarTop">
+        <button class="navbar-toggler d-lg-none" id="burguer" type="button" data-toggle="collapse"
+            data-target="#collapsibleNavId" aria-controls="collapsibleNavId" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavId">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="navbar-brand" href="Notas.html">Notes</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdownMenu" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">Noticias</a>
+                    <div class="dropdown-menu" id="downlist" aria-labelledby="dropdownId">
+                        <a class="dropdown-item" href="#">Action 1</a>
+                        <a class="dropdown-item" href="#">Action 2</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">Nosotros</a>
+                    <div class="dropdown-menu" id="downlist" aria-labelledby="dropdownId">
+                        <a class="dropdown-item" href="#">Action 1</a>
+                        <a class="dropdown-item" href="#">Action 2</a>
+                    </div>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Contacto<span class="sr-only"></span></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div id="vista">
+        <div id="appVue">
+            <input id="filter" placeholder="Filter..." v-model="filterSearch">
+            <div class="recordatorio">
+                <h1>Proyecto Vue.js - Jesús González</h1>
+            </div>
+
+            <div class="tareas">
+                <hr>
+                <p><i class="fa fa-bar-chart" style="font-size:1rem;color:rgb(255, 255, 255)"></i> {{totalPendientes}}
+                    Tareas pendientes de
+                    un total de {{totalNotes}} | <i v-on:click="deleteCompletedNotes" class="fa fa-times"
+                        style="font-size:1rem;color:rgb(255, 136, 0)"></i> <strong>Borrar tareas completadas</strong>
+                </p>
+                <hr>
+            </div>
+            <input placeholder="What do you want to remember?" v-model="newNote" v-on:keyup.enter="addNote">
+            <transition-group name="fade">
+                <div id="card" v-for="(note,index) in filterList" v-bind:key="note.title+index">
+                    <div id="subcard" v-if="show">
+                        <div class="checkbox">
+                            <label>
+                                <input v-if="note.completed" checked type="checkbox" v-on:click="changeEstate(index)">
+                                <input v-if="!note.completed" type="checkbox" v-on:click="changeEstate(index)">
+                                <span class="checkbox-icon-wrapper">
+                                    <i class="checkbox-icon fa fa-check" style="font-size:2rem;"></i>
+                                </span>
+                                <span class="textoCheck">
+                                    {{note.title}}
+                                </span>
+                            </label>
+                        </div>
+                        <div id="fecha">
+                            <p style="color: rgb(216, 216, 216);">Fecha: {{note.date}}</p>
+                            <p style="color: rgb(216, 216, 216);;">Prioridad:  
+                            <button v-if="note.priority==0" style="background-color: rgb(140, 233, 235);color:black; border-color: black;" v-on:click="changePriority(index)">Low</button>
+                            <button v-if="note.priority==1" style="background-color: rgb(215, 233, 49);color:black; border-color: black;" v-on:click="changePriority(index)">Medium</button>
+                            <button v-if="note.priority==2" style="background-color: rgb(255, 102, 0);color:black; border-color: black;" v-on:click="changePriority(index)">High</button></p>
+                        </div>
+                    </div>
+                    <div id="borrar" v-on:click="deleteNote(index)" v-on:click="show=!show" style="width:5rem;height:5rem;background-color:red;">
+                        <i id="trash" class="fa fa-trash" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </transition-group>
+        </div>
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+    <script src="index.js"></script>
+</body>
+
+</html>
