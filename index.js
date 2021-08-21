@@ -13,10 +13,12 @@ var app = new Vue({
     },
     methods: {
         addNote: function () {
+            let date = new Date();
+            let formatedDate = date.toLocaleString('es-ES');
             this.list.push({
                 title: this.newNote,
                 priority: 0,
-                date: new Date(),
+                date: formatedDate,
                 completed: false
             });
             this.newNote = "";
